@@ -1,6 +1,7 @@
 package raytracer
 
 import java.io.{ File, FileOutputStream, FileWriter, PrintStream, PrintWriter }
+import scala.annotation.tailrec
 import scala.util.Random
 
 /**
@@ -23,13 +24,18 @@ object Main extends App:
     }
   }
 
-  def rayColor(ray: Ray, world: Hittable): Color = {
-    world.hit(ray, 0, Double.PositiveInfinity).map { rec =>
-      0.5 * (rec.normal + new Color(1.0, 1.0, 1.0))
-    }.getOrElse {
-      val unitDirection = ray.direction.unitVector
-      val t = 0.5 * (unitDirection.y + 1.0)
-      (1.0 - t) * new Color(1.0, 1.0, 1.0) + t * new Color(0.5, 0.7, 1.0)
+  def rayColor(ray: Ray, world: Hittable, depth: Int): Color = {
+    if (depth <= 0) {
+      new Color(0, 0, 0)
+    } else {
+      world.hit(ray, 0.001, Double.PositiveInfinity).map { rec =>
+        val target: Point3 = rec.p + rec.normal + Vec3.randomInUnitSphere
+        0.5 * rayColor(new Ray(rec.p, target - rec.p), world, depth - 1)
+      }.getOrElse {
+        val unitDirection: Point3 = ray.direction.unitVector
+        val t: Double = 0.5 * (unitDirection.y + 1.0)
+        (1.0 - t) * new Color(1.0, 1.0, 1.0) + t * new Color(0.5, 0.7, 1.0)
+      }
     }
   }
 
@@ -39,6 +45,7 @@ object Main extends App:
   val imageWidth = 400
   val imageHeight = (imageWidth / aspectRatio).toInt
   val samplesPerPixel = 100
+  val maxDepth = 50
 
   // World
   val world = new HittableList(Vector(
@@ -50,7 +57,7 @@ object Main extends App:
   val cam = new Camera()
 
   val rand = new Random()
-  val outfile = "new-world.ppm"
+  val outfile = "diffuse-sphere.ppm"
   println(s"Generating $outfile")
   val file = new PrintWriter(new FileWriter(new File(outfile)))
   file.println(s"P3\n$imageWidth $imageHeight\n255")
@@ -63,7 +70,7 @@ object Main extends App:
         val v = (j + rand.nextDouble()) / (imageHeight - 1)
         val ray = cam.getRay(u, v)
 
-        rayColor(ray, world) + color
+        rayColor(ray, world, maxDepth) + color
       }
       file.writeColor(pixelColor, samplesPerPixel)
 

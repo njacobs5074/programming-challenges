@@ -1,6 +1,7 @@
 package raytracer
 
 import java.io.PrintWriter
+import scala.annotation.tailrec
 
 class Vec3(e0: Double, e1: Double, e2: Double):
   override def toString = s"[${e.mkString(",")}]"
@@ -51,3 +52,16 @@ class Vec3(e0: Double, e1: Double, e2: Double):
 object Vec3:
   def dot(u: Vec3, v: Vec3): Double =
     u(0) * v(0) + u(1) * v(1) + u(2) * v(2)
+
+  def random: Vec3 = new Vec3(rand.nextDouble(), rand.nextDouble(), rand.nextDouble())
+
+  def random(min: Double, max: Double): Vec3 =
+    new Vec3(randomDouble(min, max), randomDouble(min, max), randomDouble(min, max))
+
+  def randomInUnitSphere = {
+    @tailrec
+    def loop(p: Vec3 = Vec3.random(-1, 1)): Vec3 =
+      if (p.lengthSquared >= 1) loop(Vec3.random(-1, 1)) else p
+
+    loop()
+  }

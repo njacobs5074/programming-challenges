@@ -1,9 +1,16 @@
 import java.io.PrintWriter
+import scala.util.Random
 
 package object raytracer:
 
   type Point3 = raytracer.Vec3
   type Color = raytracer.Vec3
+
+  val rand = new Random()
+
+  def randomDouble(min: Double, max: Double): Double =
+    min + (max - min) * rand.nextDouble()
+
 
   implicit class PrintWriterExt(out: PrintWriter):
     def writeColor(pixel: Color, samplesPerPixel: Int): Unit = {
@@ -14,9 +21,9 @@ package object raytracer:
         else x
 
       val scale: Double = 1.0 / samplesPerPixel
-      val r: Double = pixel.x * scale
-      val g: Double = pixel.y * scale
-      val b: Double = pixel.z * scale
+      val r: Double = Math.sqrt(pixel.x * scale)
+      val g: Double = Math.sqrt(pixel.y * scale)
+      val b: Double = Math.sqrt(pixel.z * scale)
 
       out.println(
         s"""
