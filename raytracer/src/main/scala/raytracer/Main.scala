@@ -29,8 +29,9 @@ object Main extends App:
       new Color(0, 0, 0)
     } else {
       world.hit(ray, 0.001, Double.PositiveInfinity).map { rec =>
-        val target: Point3 = rec.p + rec.normal + Vec3.randomInUnitSphere
-        0.5 * rayColor(new Ray(rec.p, target - rec.p), world, depth - 1)
+        rec.material.scatter(ray, rec).map { scattered =>
+          scattered.attentuation * rayColor(scattered.ray, world, depth - 1)
+        }.getOrElse(new Color(0, 0, 0))
       }.getOrElse {
         val unitDirection: Point3 = ray.direction.unitVector
         val t: Double = 0.5 * (unitDirection.y + 1.0)
@@ -48,16 +49,22 @@ object Main extends App:
   val maxDepth = 50
 
   // World
+  val materialGround = new Lambertian(new Color(0.8, 0.8, 0.0))
+  val materialCenter = new Lambertian(new Color(0.7, 0.3, 0.3))
+  val materialLeft = new Metal(new Color(0.8, 0.8, 0.8), 0.3)
+  val materialRight = new Metal(new Color(0.8, 0.6, 0.2), 1.0)
   val world = new HittableList(Vector(
-    new Sphere(new Point3(0, 0, -1), 0.5),
-    new Sphere(new Point3(0, -100.5, -1), 100)
+    new Sphere(new Point3(0.0, -100.5, -1.0), 100.0, materialGround),
+    new Sphere(new Point3(0.0, 0.0, -1.0), 0.5, materialCenter),
+    new Sphere(new Point3(-1.0, 0.0, -1.0), 0.5, materialLeft),
+    new Sphere(new Point3(1.0, 0.0, -1.0), 0.5, materialRight),
   ))
 
   // Camera
   val cam = new Camera()
 
   val rand = new Random()
-  val outfile = "diffuse-sphere.ppm"
+  val outfile = "lambertian-diffuse-sphere.ppm"
   println(s"Generating $outfile")
   val file = new PrintWriter(new FileWriter(new File(outfile)))
   file.println(s"P3\n$imageWidth $imageHeight\n255")

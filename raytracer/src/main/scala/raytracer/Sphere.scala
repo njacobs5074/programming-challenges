@@ -1,6 +1,6 @@
 package raytracer
 
-class Sphere(val center: Point3, val radius: Double) extends Hittable:
+class Sphere(val center: Point3, val radius: Double, val material: Material) extends Hittable:
   override def hit(ray: Ray, tMin: Double, tMax: Double): Option[HitRecord] = {
     import raytracer.Vec3
 
@@ -26,7 +26,7 @@ class Sphere(val center: Point3, val radius: Double) extends Hittable:
       nearestRoot(halfB, Math.sqrt(discrimant), a).map { root =>
         val p: Point3 = ray.at(root)
         val normal: Vec3 = (p - center) / radius
-        HitRecord(p, root, ray, normal)
+        HitRecord(p, root, ray, normal, material)
       }
     }
   }

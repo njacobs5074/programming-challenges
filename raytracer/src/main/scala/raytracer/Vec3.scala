@@ -1,5 +1,7 @@
 package raytracer
 
+import raytracer.Vec3.randomInUnitSphere
+
 import java.io.PrintWriter
 import scala.annotation.tailrec
 
@@ -49,6 +51,22 @@ class Vec3(e0: Double, e1: Double, e2: Double):
   def length: Double =
     Math.sqrt(lengthSquared)
 
+  def randomInHemisphere(normal: Vec3): Point3 = {
+    val inUnitSphere = randomInUnitSphere
+    if (inUnitSphere.dot(normal) > 0.0) {
+      inUnitSphere
+    } else {
+      -inUnitSphere
+    }
+  }
+
+  def nearZero: Boolean = {
+    val s: Double = 1e-8
+    (Math.abs(this(0)) < s) && (Math.abs(this(1)) < s) && (Math.abs(this(2)) < s)
+  }
+
+  def reflect(n: Vec3): Vec3 = this - 2 * dot(n) * n
+
 object Vec3:
   def dot(u: Vec3, v: Vec3): Double =
     u(0) * v(0) + u(1) * v(1) + u(2) * v(2)
@@ -65,3 +83,5 @@ object Vec3:
 
     loop()
   }
+
+  def randomUnitVector: Point3 = randomInUnitSphere.unitVector

@@ -1,6 +1,6 @@
 package raytracer
 
-case class HitRecord(val p: Point3, val t: Double, ray: Ray, outwardNormal: Vec3):
+case class HitRecord(val p: Point3, val t: Double, ray: Ray, outwardNormal: Vec3, material: Material):
   val frontFace: Boolean = ray.direction.dot(outwardNormal) < 0
   val normal: Vec3 = if (frontFace) outwardNormal else -outwardNormal
 
