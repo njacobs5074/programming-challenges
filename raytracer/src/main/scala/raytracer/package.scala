@@ -8,8 +8,9 @@ package object raytracer:
 
   val rand = new Random()
 
-  def randomDouble(min: Double, max: Double): Double =
-    min + (max - min) * rand.nextDouble()
+  implicit class RandomExt(rand: Random):
+    def randomDouble(min: Double, max: Double): Double =
+      min + (max - min) * rand.nextDouble()
 
   implicit class PrintWriterExt(out: PrintWriter):
     def writeColor(pixel: Color, samplesPerPixel: Int): Unit = {
@@ -52,3 +53,22 @@ package object raytracer:
       (-halfB - Math.sqrt(discrimant)) / a
     }
   }
+
+  def rayColor(ray: Ray, world: Hittable, maxDepth: Int = 50): Color = {
+    def loop(ray: Ray, depth: Int): Color = if (depth <= 0) {
+      new Color(0, 0, 0)
+    } else {
+      world.hit(ray, 0.001, Double.PositiveInfinity).map { rec =>
+        rec.material.scatter(ray, rec).map { scattered =>
+          scattered.attentuation * loop(scattered.ray, depth - 1)
+        }.getOrElse(new Color(0, 0, 0))
+      }.getOrElse {
+        val unitDirection: Point3 = ray.direction.unitVector
+        val t: Double = 0.5 * (unitDirection.y + 1.0)
+        (1.0 - t) * new Color(1.0, 1.0, 1.0) + t * new Color(0.5, 0.7, 1.0)
+      }
+    }
+
+    loop(ray, maxDepth)
+  }
+

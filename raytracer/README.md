@@ -1,6 +1,6 @@
 # raytracer
 
-Scala version of ["Ray Tracing in One Weekend"](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
+Scala version of [_Ray Tracing in One Weekend_](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
 by Peter Shirley.
 
-All errors & ommissions fault of this author.
+NB: All errors & omissions in this repo are the fault of this author.

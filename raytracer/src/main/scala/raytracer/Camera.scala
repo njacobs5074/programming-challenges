@@ -5,17 +5,27 @@ package raytracer
   * @since 2021/09/22
   */
 class Camera(
-  aspectRatio: Double = 16.0 / 9.0,
-  viewportHeight: Double = 2.0,
-  focalLength: Double = 1.0
+  lookFrom: Point3,
+  lookAt: Point3,
+  vup: Vec3,
+  verticalFieldOfView: Double,
+  aspectRatio: Double = 16.0 / 9.0
 ) {
+  val theta = Math.toRadians(verticalFieldOfView)
+  val h = Math.tan(theta / 2.0)
+  private val viewportHeight = 2.0 * h
   private val viewportWidth = aspectRatio * viewportHeight
-  private val origin = new Point3(0, 0, 0)
-  private val horizontal = new Vec3(viewportWidth, 0, 0)
-  private val vertical = new Vec3(0, viewportHeight, 0)
-  private val lowerLeftCorner =
-    origin - horizontal / 2.0 - vertical / 2.0 - new Vec3(0, 0, focalLength)
 
-  def getRay(u: Double, v: Double) =
-    new Ray(origin, lowerLeftCorner + u * horizontal + v * vertical - origin)
+  val w = (lookFrom - lookAt).unitVector
+  val u = vup.cross(w).unitVector
+  val v = w.cross(u)
+
+  val origin = lookFrom
+  val horizontal = viewportWidth * u
+  val vertical = viewportHeight * v
+  val lowerLeftCorner = origin - horizontal / 2.0 - vertical / 2.0 - w
+
+  def getRay(s: Double, t: Double): Ray =
+    new Ray(origin, lowerLeftCorner + s * horizontal + t * vertical - origin)
+
 }

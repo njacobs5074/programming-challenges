@@ -22,7 +22,7 @@ class Vec3(e0: Double, e1: Double, e2: Double):
   def unary_- = Vec3(e.map(_ * -1.0))
 
   def /(t: Double): Vec3 =
-    Vec3(e(0) / t, e(1) / t, e(2) / t)
+    Vec3(this(0) / t, this(1) / t, this(2) / t)
 
   def unitVector: Vec3 =
     this / this.length
@@ -43,10 +43,14 @@ class Vec3(e0: Double, e1: Double, e2: Double):
     this(0) * v(0) + this(1) * v(1) + this(2) * v(2)
 
   def cross(v: Vec3): Vec3 =
-    Vec3(this(1) * v(2) - this(2), v(2) * this(0) - v(0), v(0) * this(1) - v(1))
+    Vec3(
+      this(1) * v(2) - this(2) * v(1),
+      this(2) * v(0) - this(0) * v(2),
+      this(0) * v(1) - this(1) * v(0)
+    )
 
   def lengthSquared: Double =
-    this(0) * this(0) + this(1) * this(1) + this(2) * this(2)
+    this(0).squared + this(1).squared + this(2).squared
 
   def length: Double =
     Math.sqrt(lengthSquared)
@@ -65,8 +69,9 @@ class Vec3(e0: Double, e1: Double, e2: Double):
     (Math.abs(this(0)) < s) && (Math.abs(this(1)) < s) && (Math.abs(this(2)) < s)
   }
 
-  def reflect(n: Vec3): Vec3 = this - 2 * dot(n) * n
-  
+  def reflect(n: Vec3): Vec3 =
+    this - 2 * dot(n) * n
+
   def refract(n: Vec3, etaIOverEtaT: Double): Vec3 = {
     val cosTheta: Double = Math.min(-this.dot(n), 1.0)
     val rOutPerpendicular: Vec3 = etaIOverEtaT * (this + cosTheta * n)
@@ -75,13 +80,10 @@ class Vec3(e0: Double, e1: Double, e2: Double):
   }
 
 object Vec3:
-  def dot(u: Vec3, v: Vec3): Double =
-    u(0) * v(0) + u(1) * v(1) + u(2) * v(2)
-
   def random: Vec3 = new Vec3(rand.nextDouble(), rand.nextDouble(), rand.nextDouble())
 
   def random(min: Double, max: Double): Vec3 =
-    new Vec3(randomDouble(min, max), randomDouble(min, max), randomDouble(min, max))
+    new Vec3(rand.randomDouble(min, max), rand.randomDouble(min, max), rand.randomDouble(min, max))
 
   def randomInUnitSphere = {
     @tailrec
