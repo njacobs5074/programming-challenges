@@ -11,7 +11,6 @@ package object raytracer:
   def randomDouble(min: Double, max: Double): Double =
     min + (max - min) * rand.nextDouble()
 
-
   implicit class PrintWriterExt(out: PrintWriter):
     def writeColor(pixel: Color, samplesPerPixel: Int): Unit = {
 
@@ -36,6 +35,8 @@ package object raytracer:
 
   implicit class DoubleExt(d: Double):
     def *(v: Vec3): Vec3 = v * d
+
+    def squared: Double = d * d
 
   def hitSphere(center: Point3, radius: Double, r: Ray): Double = {
     import Vec3.*

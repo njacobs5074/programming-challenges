@@ -66,6 +66,13 @@ class Vec3(e0: Double, e1: Double, e2: Double):
   }
 
   def reflect(n: Vec3): Vec3 = this - 2 * dot(n) * n
+  
+  def refract(n: Vec3, etaIOverEtaT: Double): Vec3 = {
+    val cosTheta: Double = Math.min(-this.dot(n), 1.0)
+    val rOutPerpendicular: Vec3 = etaIOverEtaT * (this + cosTheta * n)
+    val rOutParallel: Vec3 = -Math.sqrt(Math.abs(1.0 - rOutPerpendicular.lengthSquared)) * n
+    rOutPerpendicular + rOutParallel
+  }
 
 object Vec3:
   def dot(u: Vec3, v: Vec3): Double =

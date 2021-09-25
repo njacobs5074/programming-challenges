@@ -50,13 +50,14 @@ object Main extends App:
 
   // World
   val materialGround = new Lambertian(new Color(0.8, 0.8, 0.0))
-  val materialCenter = new Lambertian(new Color(0.7, 0.3, 0.3))
-  val materialLeft = new Metal(new Color(0.8, 0.8, 0.8), 0.3)
-  val materialRight = new Metal(new Color(0.8, 0.6, 0.2), 1.0)
+  val materialCenter = new Lambertian(new Color(0.1, 0.2, 0.5))
+  val materialLeft = new Dieletric(1.5)
+  val materialRight = new Metal(new Color(0.8, 0.6, 0.2), 0.0)
   val world = new HittableList(Vector(
     new Sphere(new Point3(0.0, -100.5, -1.0), 100.0, materialGround),
     new Sphere(new Point3(0.0, 0.0, -1.0), 0.5, materialCenter),
     new Sphere(new Point3(-1.0, 0.0, -1.0), 0.5, materialLeft),
+    new Sphere(new Point3(-1.0, 0.0, -1.0), -0.4, materialLeft),
     new Sphere(new Point3(1.0, 0.0, -1.0), 0.5, materialRight),
   ))
 
@@ -64,13 +65,13 @@ object Main extends App:
   val cam = new Camera()
 
   val rand = new Random()
-  val outfile = "lambertian-diffuse-sphere.ppm"
+  val outfile = "hollow-glass-sphere.ppm"
   println(s"Generating $outfile")
   val file = new PrintWriter(new FileWriter(new File(outfile)))
   file.println(s"P3\n$imageWidth $imageHeight\n255")
 
   for j <- imageHeight - 1 to 0 by -1 do
-    print(".")
+    print(s"Scanline = $j...\r")
     for i <- 0 to imageWidth - 1 do
       val pixelColor: Color = Range(0, samplesPerPixel).foldLeft(new Color(0, 0, 0)) { case (color, _) =>
         val u = (i + rand.nextDouble()) / (imageWidth - 1)
