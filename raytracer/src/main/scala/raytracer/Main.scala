@@ -35,9 +35,14 @@ object Main extends App:
   ))
 
   // Camera
-  val cam = new Camera(new Point3(-2, 2, 1), new Point3(0, 0, -1), new Vec3(0, 1, 0), 20.0)
+  val lookFrom = new Point3(3, 3, 2)
+  val lookAt = new Point3(0, 0, -1)
+  val vup = new Vec3(0, 1, 0)
+  val distToFocus = (lookFrom - lookAt).length
 
-  val outfile = "camera-angle-2.ppm"
+  val cam = new Camera(lookFrom, lookAt, vup, 20, 2.0, distToFocus)
+
+  val outfile = "camera-with-depth-of-field.ppm"
   println(s"Generating $outfile")
   val start = LocalDateTime.now()
   val file = new PrintWriter(new FileWriter(new File(outfile)))

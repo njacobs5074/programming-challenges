@@ -9,6 +9,8 @@ class Camera(
   lookAt: Point3,
   vup: Vec3,
   verticalFieldOfView: Double,
+  aperture: Double,
+  focusDistance: Double,
   aspectRatio: Double = 16.0 / 9.0
 ) {
   val theta = Math.toRadians(verticalFieldOfView)
@@ -21,11 +23,16 @@ class Camera(
   val v = w.cross(u)
 
   val origin = lookFrom
-  val horizontal = viewportWidth * u
-  val vertical = viewportHeight * v
-  val lowerLeftCorner = origin - horizontal / 2.0 - vertical / 2.0 - w
+  val horizontal = focusDistance * viewportWidth * u
+  val vertical = focusDistance * viewportHeight * v
+  val lowerLeftCorner = origin - horizontal / 2.0 - vertical / 2.0 - focusDistance * w
+  val lensRadius = aperture / 2.0
 
-  def getRay(s: Double, t: Double): Ray =
-    new Ray(origin, lowerLeftCorner + s * horizontal + t * vertical - origin)
+  def getRay(s: Double, t: Double): Ray = {
+    val rd = lensRadius * Vec3.randomInUnitDisk
+    val offset = u * rd.x + v * rd.y
+
+    new Ray(origin + offset, lowerLeftCorner + s * horizontal + t * vertical - origin - offset)
+  }
 
 }

@@ -88,7 +88,15 @@ object Vec3:
   def randomInUnitSphere = {
     @tailrec
     def loop(p: Vec3 = Vec3.random(-1, 1)): Vec3 =
-      if (p.lengthSquared >= 1) loop(Vec3.random(-1, 1)) else p
+      if (p.lengthSquared >= 1) loop() else p
+
+    loop()
+  }
+
+  def randomInUnitDisk = {
+    @tailrec
+    def loop(p: Vec3 = Vec3(rand.randomDouble(-1, 1), rand.randomDouble(-1, 1), 0)): Vec3 =
+      if (p.lengthSquared >= 1.0) loop() else p
 
     loop()
   }
