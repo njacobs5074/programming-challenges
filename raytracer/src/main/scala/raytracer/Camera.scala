@@ -1,9 +1,5 @@
 package raytracer
 
-/** @author
-  *   nick
-  * @since 2021/09/22
-  */
 class Camera(
   lookFrom: Point3,
   lookAt: Point3,

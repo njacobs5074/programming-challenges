@@ -25,8 +25,7 @@ package object raytracer:
       val g: Double = Math.sqrt(pixel.y * scale)
       val b: Double = Math.sqrt(pixel.z * scale)
 
-      out.println(
-        s"""
+      out.println(s"""
            |${(256 * clamp(r, 0.0, 0.999)).toInt}
            |${(256 * clamp(g, 0.0, 0.999)).toInt}
            |${(256 * clamp(b, 0.0, 0.999)).toInt}
@@ -45,7 +44,7 @@ package object raytracer:
     val oc: Vec3 = r.origin - center
     val a = r.direction.lengthSquared
     val halfB = oc.dot(r.direction)
-    val c =  oc.lengthSquared - radius * radius
+    val c = oc.lengthSquared - radius * radius
     val discrimant = halfB * halfB - a * c
     if (discrimant < 0) {
       -1.0
@@ -55,20 +54,25 @@ package object raytracer:
   }
 
   def rayColor(ray: Ray, world: Hittable, maxDepth: Int = 50): Color = {
-    def loop(ray: Ray, depth: Int): Color = if (depth <= 0) {
-      new Color(0, 0, 0)
-    } else {
-      world.hit(ray, 0.001, Double.PositiveInfinity).map { rec =>
-        rec.material.scatter(ray, rec).map { scattered =>
-          scattered.attentuation * loop(scattered.ray, depth - 1)
-        }.getOrElse(new Color(0, 0, 0))
-      }.getOrElse {
-        val unitDirection: Point3 = ray.direction.unitVector
-        val t: Double = 0.5 * (unitDirection.y + 1.0)
-        (1.0 - t) * new Color(1.0, 1.0, 1.0) + t * new Color(0.5, 0.7, 1.0)
+    def loop(ray: Ray, depth: Int): Color = {
+      if (depth <= 0) { // Check on depth of recursion - light is just absorbed
+        new Color(0, 0, 0)
+      } else {
+        world
+          .hit(ray, 0.001, Double.PositiveInfinity)
+          .map(rec =>
+            rec.material
+              .scatter(ray, rec)
+              .map(scattered => scattered.attentuation * loop(scattered.ray, depth - 1))
+              .getOrElse(new Color(0, 0, 0))
+          )
+          .getOrElse {
+            val unitDirection: Point3 = ray.direction.unitVector
+            val t: Double = 0.5 * (unitDirection.y + 1.0)
+            (1.0 - t) * new Color(1.0, 1.0, 1.0) + t * new Color(0.5, 0.7, 1.0)
+          }
       }
     }
 
     loop(ray, maxDepth)
   }
-
