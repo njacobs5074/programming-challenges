@@ -1,7 +1,7 @@
 package raytracer
 
-import java.io.{File, FileOutputStream, FileWriter, PrintStream, PrintWriter}
-import java.time.{Duration, LocalDateTime}
+import java.io.{ File, FileOutputStream, FileWriter, PrintStream, PrintWriter }
+import java.time.{ Duration, LocalDateTime }
 import java.util.Date
 import scala.annotation.tailrec
 import scala.util.Random
@@ -75,7 +75,7 @@ object BookCover extends App:
   val distToFocus = 10.0
   val aperture = 0.1
 
-  val cam = new Camera(
+  val camera = new Camera(
     lookFrom,
     lookAt,
     vup,
@@ -85,27 +85,4 @@ object BookCover extends App:
     aspectRatio
   )
 
-  val outfile = "book-cover.ppm"
-  println(s"Generating $outfile")
-  val start = LocalDateTime.now()
-  val file = new PrintWriter(new FileWriter(new File(outfile)))
-  file.println(s"P3\n$imageWidth $imageHeight\n255")
-
-  for j <- imageHeight - 1 to 0 by -1 do
-    print(s"Scanline = ${j + 1} of $imageHeight...\r")
-    for i <- 0 to imageWidth - 1 do
-      val pixelColor: Color = Range(0, samplesPerPixel).foldLeft(new Color(0, 0, 0)) {
-        case (color, _) =>
-          val u = (i + rand.nextDouble()) / (imageWidth - 1)
-          val v = (j + rand.nextDouble()) / (imageHeight - 1)
-          val ray = cam.getRay(u, v)
-
-          rayColor(ray, world) + color
-      }
-      file.writeColor(pixelColor, samplesPerPixel)
-
-  file.close()
-
-  val elapsedTime = Math.abs(Duration.between(start, LocalDateTime.now()).toMinutes)
-
-  println(s"\nDone in $elapsedTime minutes")
+  new RayTracer(world, "book-cover.ppm", imageWidth, imageHeight, samplesPerPixel, camera).render()
