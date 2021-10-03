@@ -14,7 +14,7 @@ object Main extends App:
   val aspectRatio = 16.0 / 9.0
   val imageWidth = 400
   val imageHeight = (imageWidth / aspectRatio).toInt
-  val samplesPerPixel = 100
+  val samplesPerPixel = 500
 
   // World
   val materialGround = new Lambertian(new Color(0.8, 0.8, 0.0))
