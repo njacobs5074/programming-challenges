@@ -12,27 +12,6 @@ package object raytracer:
     def randomDouble(min: Double, max: Double): Double =
       min + (max - min) * rand.nextDouble()
 
-  implicit class PrintWriterExt(out: PrintWriter):
-    def writeColor(pixel: Color, samplesPerPixel: Int): Unit = {
-
-      def clamp(x: Double, min: Double, max: Double) =
-        if (x < min) min
-        else if (x > max) max
-        else x
-
-      val scale: Double = 1.0 / samplesPerPixel
-      val r: Double = Math.sqrt(pixel.x * scale)
-      val g: Double = Math.sqrt(pixel.y * scale)
-      val b: Double = Math.sqrt(pixel.z * scale)
-
-      out.println(s"""
-           |${(256 * clamp(r, 0.0, 0.999)).toInt}
-           |${(256 * clamp(g, 0.0, 0.999)).toInt}
-           |${(256 * clamp(b, 0.0, 0.999)).toInt}
-           |""".stripMargin.replace("\n", " "))
-
-    }
-
   implicit class DoubleExt(d: Double):
     def *(v: Vec3): Vec3 = v * d
 

@@ -1,5 +1,7 @@
 package raytracer
 
+import raytracer.io.PPMFileWriter
+
 import java.io.{ File, FileWriter, PrintWriter }
 import java.time.{ Duration, LocalDateTime }
 
@@ -16,8 +18,7 @@ class RayTracer(
     println(s"Generating $outfile")
 
     val start = LocalDateTime.now()
-    val file = new PrintWriter(new FileWriter(new File(outfile)))
-    file.println(s"P3\n$imageWidth $imageHeight\n255")
+    val file = new PPMFileWriter(imageWidth, imageHeight, samplesPerPixel, File(outfile))
 
     for j <- imageHeight - 1 to 0 by -1 do
       print(s"Scanline: ${j + 1} of $imageHeight...\r")
@@ -31,11 +32,11 @@ class RayTracer(
 
             rayColor(ray, world) + color
         }
-        file.writeColor(pixelColor, samplesPerPixel)
+        file.writeColor(pixelColor)
 
     file.close()
 
-    val elapsedTime = Math.abs(Duration.between(start, LocalDateTime.now()).toMinutes)
+    val elapsedTime = Math.abs(Duration.between(start, LocalDateTime.now()).toSeconds)
 
-    println(s"\nDone in $elapsedTime minutes")
+    println(s"\nDone in $elapsedTime seconds")
   }
