@@ -7,6 +7,8 @@ class Camera(
   verticalFieldOfView: Double,
   aperture: Double,
   focusDistance: Double,
+  time0: Double = 0.0,
+  time1: Double = 0.0,
   aspectRatio: Double = 16.0 / 9.0
 ) {
   val theta = Math.toRadians(verticalFieldOfView)
@@ -28,7 +30,11 @@ class Camera(
     val rd = lensRadius * Vec3.randomInUnitDisk
     val offset = u * rd.x + v * rd.y
 
-    new Ray(origin + offset, lowerLeftCorner + s * horizontal + t * vertical - origin - offset)
+    new Ray(
+      origin + offset,
+      lowerLeftCorner + s * horizontal + t * vertical - origin - offset,
+      rand.randomDouble(time0, time1)
+    )
   }
 
 }

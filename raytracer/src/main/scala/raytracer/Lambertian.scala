@@ -10,7 +10,11 @@ class Lambertian(val albedo: Color) extends Material:
 
     Some(
       Scattered(
-        Ray(hitRecord.p, if (scatterDirection.nearZero) hitRecord.normal else scatterDirection),
+        Ray(
+          hitRecord.p,
+          if (scatterDirection.nearZero) hitRecord.normal else scatterDirection,
+          rayIn.time
+        ),
         albedo
       )
     )

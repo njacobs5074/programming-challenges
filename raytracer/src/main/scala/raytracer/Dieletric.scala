@@ -20,7 +20,7 @@ class Dieletric(val indexOfRefraction: Double) extends Material {
         unitDirection.refract(hitRecord.normal, refractionRatio)
       }
 
-    Some(Scattered(new Ray(hitRecord.p, direction), new Color(1.0, 1.0, 1.0)))
+    Some(Scattered(new Ray(hitRecord.p, direction, rayIn.time), new Color(1.0, 1.0, 1.0)))
   }
 
   // Use Schlick's approximation for reflectance.

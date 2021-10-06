@@ -55,3 +55,19 @@ package object raytracer:
 
     loop(ray, maxDepth)
   }
+
+  // Find the nearest root that lies in the acceptable range or None if there isn't one.
+  def nearestRoot(
+    halfB: Double,
+    sqrtd: Double,
+    a: Double,
+    tMin: Double,
+    tMax: Double
+  ): Option[Double] =
+    (-halfB - sqrtd) / a match {
+      case root1 if root1 < tMin || tMax < root1 =>
+        val root2 = (-halfB + sqrtd) / a
+        if (root2 < tMin || tMax < root2) None else Some(root2)
+      case root1 =>
+        Some(root1)
+    }
