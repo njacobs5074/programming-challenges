@@ -25,7 +25,8 @@ object BookCover extends App:
                 // diffuse
                 val albedo: Color = Vec3.random * Vec3.random
                 val sphereMaterial = new Lambertian(albedo)
-                Some(new Sphere(center, 0.2, sphereMaterial))
+                val center2 = center + new Vec3(0, rand.randomDouble(0, .5), 0)
+                Some(new MovingSphere(center, center2, 0.0, 1.0, 0.2, sphereMaterial))
               } else if (chooseMat < 0.95) {
                 // metal
                 val albedo: Color = Vec3.random(0.5, 1)
@@ -60,10 +61,10 @@ object BookCover extends App:
   }
 
   // Image
-  val aspectRatio = 3.0 / 2.0
-  val imageWidth = 1200
+  val aspectRatio = 16.0 / 9.0
+  val imageWidth = 400
   val imageHeight = (imageWidth / aspectRatio).toInt
-  val samplesPerPixel = 500
+  val samplesPerPixel = 100
 
   // World
   val world = randomScene
@@ -82,7 +83,10 @@ object BookCover extends App:
     verticalFieldOfView = 20.0,
     aperture,
     distToFocus,
+    time0 = 0.0,
+    time1 = 1.0,
     aspectRatio
   )
 
-  new RayTracer(world, "book-cover.ppm", imageWidth, imageHeight, samplesPerPixel, camera).render()
+  new RayTracer(world, "bouncing-spheres.ppm", imageWidth, imageHeight, samplesPerPixel, camera)
+    .render()
