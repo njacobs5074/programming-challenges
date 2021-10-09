@@ -3,7 +3,7 @@ package raytracer
 class Camera(
   lookFrom: Point3,
   lookAt: Point3,
-  vup: Vec3,
+  viewUpVector: Vec3,
   verticalFieldOfView: Double,
   aperture: Double,
   focusDistance: Double,
@@ -17,7 +17,7 @@ class Camera(
   private val viewportWidth = aspectRatio * viewportHeight
 
   val w = (lookFrom - lookAt).unitVector
-  val u = vup.cross(w).unitVector
+  val u = viewUpVector.cross(w).unitVector
   val v = w.cross(u)
 
   val origin = lookFrom

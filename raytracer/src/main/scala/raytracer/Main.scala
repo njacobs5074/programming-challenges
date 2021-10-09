@@ -35,10 +35,10 @@ object Main extends App:
   // Camera
   val lookFrom = new Point3(3, 3, 2)
   val lookAt = new Point3(0, 0, -1)
-  val vup = new Vec3(0, 1, 0)
+  val viewUpVector = new Vec3(0, 1, 0)
   val distToFocus = (lookFrom - lookAt).length
 
-  val camera = new Camera(lookFrom, lookAt, vup, 20, 2.0, distToFocus)
+  val camera = new Camera(lookFrom, lookAt, viewUpVector, 20, 2.0, distToFocus)
 
   val rayTracer = new RayTracer(
     world,

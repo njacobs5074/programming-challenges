@@ -72,14 +72,14 @@ object BookCover extends App:
   // Camera
   val lookFrom = new Point3(13, 2, 3)
   val lookAt = new Point3(0, 0, 0)
-  val vup = new Vec3(0, 1, 0)
+  val viewUpVector = new Vec3(0, 1, 0)
   val distToFocus = 10.0
   val aperture = 0.1
 
   val camera = new Camera(
     lookFrom,
     lookAt,
-    vup,
+    viewUpVector,
     verticalFieldOfView = 20.0,
     aperture,
     distToFocus,
