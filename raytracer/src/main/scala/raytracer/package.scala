@@ -1,4 +1,3 @@
-import java.io.PrintWriter
 import scala.util.Random
 
 package object raytracer:

@@ -2,7 +2,7 @@ package raytracer
 
 import raytracer.io.PPMFileWriter
 
-import java.io.{ File, FileWriter, PrintWriter }
+import java.io.File
 import java.time.{ Duration, LocalDateTime }
 
 class RayTracer(

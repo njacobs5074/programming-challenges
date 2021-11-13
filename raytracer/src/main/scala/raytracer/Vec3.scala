@@ -2,7 +2,6 @@ package raytracer
 
 import raytracer.Vec3.randomInUnitSphere
 
-import java.io.PrintWriter
 import scala.annotation.tailrec
 
 class Vec3(e0: Double, e1: Double, e2: Double):

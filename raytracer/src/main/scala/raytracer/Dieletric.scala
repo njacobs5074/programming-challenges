@@ -1,9 +1,5 @@
 package raytracer
 
-/** @author
-  *   nick
-  * @since 2021/09/25
-  */
 class Dieletric(val indexOfRefraction: Double) extends Material {
   override def scatter(rayIn: Ray, hitRecord: HitRecord): Option[Scattered] = {
     val refractionRatio = if (hitRecord.frontFace) 1.0 / indexOfRefraction else indexOfRefraction

@@ -1,9 +1,5 @@
 package raytracer
 
-/** @author
-  *   nick
-  * @since 2021/09/24
-  */
 class Metal(val albedo: Color, fuzzy: Double) extends Material {
 
   override def scatter(rayIn: Ray, hitRecord: HitRecord): Option[Scattered] = {

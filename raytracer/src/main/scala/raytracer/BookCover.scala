@@ -1,11 +1,5 @@
 package raytracer
 
-import java.io.{ File, FileOutputStream, FileWriter, PrintStream, PrintWriter }
-import java.time.{ Duration, LocalDateTime }
-import java.util.Date
-import scala.annotation.tailrec
-import scala.util.Random
-
 object BookCover extends App:
 
   import raytracer.*
@@ -13,40 +7,34 @@ object BookCover extends App:
   def randomScene: HittableList = {
 
     // Generate random spheres to litter the scene with.
-    val randomSpheres = Range(-11, 11)
-      .map { a =>
-        Range(-11, 11)
-          .map { b =>
-            val chooseMat = rand.nextDouble()
-            val center = new Point3(a + 0.9 * rand.nextDouble(), 0.2, b + 0.9 * rand.nextDouble())
+    val randomSpheres = Range(-11, 11).flatMap { a =>
+      Range(-11, 11).flatMap { b =>
+        val chooseMat = rand.nextDouble()
+        val center = new Point3(a + 0.9 * rand.nextDouble(), 0.2, b + 0.9 * rand.nextDouble())
 
-            if ((center - new Point3(4, 0.2, 0)).length > 0.9) {
-              if (chooseMat < 0.8) {
-                // diffuse
-                val albedo: Color = Vec3.random * Vec3.random
-                val sphereMaterial = new Lambertian(albedo)
-                val center2 = center + new Vec3(0, rand.randomDouble(0, .5), 0)
-                Some(new MovingSphere(center, center2, 0.0, 1.0, 0.2, sphereMaterial))
-              } else if (chooseMat < 0.95) {
-                // metal
-                val albedo: Color = Vec3.random(0.5, 1)
-                val fuzz = rand.randomDouble(0, 0.5)
-                val sphereMaterial = new Metal(albedo, fuzz)
-                Some(new Sphere(center, 0.2, sphereMaterial))
-              } else {
-                // glass
-                val sphereMaterial = new Dieletric(1.5)
-                Some(new Sphere(center, 0.2, sphereMaterial))
-              }
-            } else {
-              None
-            }
+        if ((center - new Point3(4, 0.2, 0)).length > 0.9) {
+          if (chooseMat < 0.8) {
+            // diffuse
+            val albedo: Color = Vec3.random * Vec3.random
+            val sphereMaterial = new Lambertian(albedo)
+            val center2 = center + new Vec3(0.0, rand.randomDouble(0.0, 0.5), 0.0)
+            Some(new MovingSphere(center, center2, 0.0, 1.0, 0.2, sphereMaterial))
+          } else if (chooseMat < 0.95) {
+            // metal
+            val albedo: Color = Vec3.random(0.5, 1)
+            val fuzz = rand.randomDouble(0, 0.5)
+            val sphereMaterial = new Metal(albedo, fuzz)
+            Some(new Sphere(center, 0.2, sphereMaterial))
+          } else {
+            // glass
+            val sphereMaterial = new Dieletric(1.5)
+            Some(new Sphere(center, 0.2, sphereMaterial))
           }
-          .toVector
-          .flatten
-      }
-      .toVector
-      .flatten
+        } else {
+          None
+        }
+      }.toVector
+    }.toVector
 
     // Fixed spheres - These are always present in the scene.
     val fixedSpheres = Vector(

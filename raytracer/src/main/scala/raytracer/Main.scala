@@ -1,11 +1,5 @@
 package raytracer
 
-import java.io.{ File, FileOutputStream, FileWriter, PrintStream, PrintWriter }
-import java.time.{ Duration, LocalDateTime }
-import java.util.Date
-import scala.annotation.tailrec
-import scala.util.Random
-
 object Main extends App:
 
   import raytracer.*
