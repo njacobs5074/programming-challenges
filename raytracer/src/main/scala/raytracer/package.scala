@@ -1,3 +1,4 @@
+import scala.annotation.{ targetName, unused }
 import scala.util.Random
 
 package object raytracer:
@@ -16,6 +17,7 @@ package object raytracer:
 
     def squared: Double = d * d
 
+  @unused
   def hitSphere(center: Point3, radius: Double, r: Ray): Double = {
     import Vec3.*
 
@@ -41,7 +43,7 @@ package object raytracer:
           .map(rec =>
             rec.material
               .scatter(ray, rec)
-              .map(scattered => scattered.attentuation * loop(scattered.ray, depth - 1))
+              .map(scattered => scattered.attenuation * loop(scattered.ray, depth - 1))
               .getOrElse(new Color(0, 0, 0))
           )
           .getOrElse {

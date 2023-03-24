@@ -23,7 +23,7 @@ class RayTracer(
     for j <- imageHeight - 1 to 0 by -1 do
       print(s"Scanline: ${j + 1} of $imageHeight...\r")
 
-      for i <- 0 to imageWidth - 1 do
+      for i <- 0 until imageWidth do
         val pixelColor: Color = Range(0, samplesPerPixel).foldLeft(new Color(0, 0, 0)) {
           case (color, _) =>
             val u = (i + rand.nextDouble()) / (imageWidth - 1)

@@ -9,11 +9,11 @@ class Sphere(val center: Point3, val radius: Double, val material: Material) ext
     val halfB: Double = oc.dot(ray.direction)
     val c: Double = oc.lengthSquared - radius * radius
 
-    val discrimant: Double = halfB * halfB - a * c
-    if (discrimant < 0) {
+    val discriminant: Double = halfB * halfB - a * c
+    if (discriminant < 0) {
       None
     } else {
-      nearestRoot(halfB, Math.sqrt(discrimant), a, tMin, tMax).map { root =>
+      nearestRoot(halfB, Math.sqrt(discriminant), a, tMin, tMax).map { root =>
         val p: Point3 = ray.at(root)
         val normal: Vec3 = (p - center) / radius
         HitRecord(p, root, ray, normal, material)

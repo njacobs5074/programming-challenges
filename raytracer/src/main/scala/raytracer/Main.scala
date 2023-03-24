@@ -11,10 +11,10 @@ object Main extends App:
   val samplesPerPixel = 100
 
   // World
-  val materialGround = new Lambertian(new Color(0.8, 0.8, 0.0))
-  val materialCenter = new Lambertian(new Color(0.1, 0.2, 0.5))
-  val materialLeft = new Dieletric(1.5)
-  val materialRight = new Metal(new Color(0.8, 0.6, 0.2), 0.0)
+  private val materialGround = new Lambertian(new Color(0.8, 0.8, 0.0))
+  private val materialCenter = new Lambertian(new Color(0.1, 0.2, 0.5))
+  private val materialLeft = new Dieletric(1.5)
+  private val materialRight = new Metal(new Color(0.8, 0.6, 0.2), 0.0)
 
   val world = new HittableList(
     Vector(
@@ -34,7 +34,7 @@ object Main extends App:
 
   val camera = new Camera(lookFrom, lookAt, viewUpVector, 20, 2.0, distToFocus)
 
-  val rayTracer = new RayTracer(
+  private val rayTracer = new RayTracer(
     world,
     "camera-with-depth-of-field.ppm",
     imageWidth,
