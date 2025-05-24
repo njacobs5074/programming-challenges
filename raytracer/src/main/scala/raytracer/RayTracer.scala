@@ -36,7 +36,7 @@ class RayTracer(
 
     file.close()
 
-    val elapsedTime = Math.abs(Duration.between(start, LocalDateTime.now()).toSeconds)
+    val elapsedTime = Math.abs(Duration.between(start, LocalDateTime.now()).getSeconds)
 
     println(s"\nDone in $elapsedTime seconds")
   }
